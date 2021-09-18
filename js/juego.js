@@ -287,6 +287,25 @@ var objPieza = function(){
     this.angulo = 0;
     this.tipo = 0;
 
+    this.retraso = 50;
+    this.fotograma = 0;
+
+    this.nueva = function(){
+        this.tipo = Math.floor(Math.random()*7);
+        this.y = 4;
+        this.x = 2;
+    }
+
+    this.caer = function(){
+        if(this.fotograma < this.retraso){
+            this.fotograma++;
+        } else {
+            this.y++;
+            this.fotograma = 0;
+        }
+    }
+    
+
     this.dibuja = function(){
         for(py=0;py<4;py++){
             for(px=0;px<4;px++){
@@ -312,24 +331,30 @@ var objPieza = function(){
                     if(fichaGrafico[this.tipo][this.angulo][py][px]===7){
                         ctx.fillStyle = morado;
                     }
-                    ctx.fillRect((this.x + px)*anchoF, (this.y + py)*altoF, anchoF, altoF);
+                    ctx.fillRect((this.x + px - 1)*anchoF, (this.y + py - margenSuperior)*altoF, anchoF, altoF);
                 }
             }
         }
     }
 
     this.rotar = function(){        
+        if(this.angulo < 3){
+            this.angulo++;
+        } else {
+            this.angulo = 0;
+        }
         console.log('rotar');
     }
     this.abajo = function(){ 
-        console.log('abajo');       
+        this.y++;
     }
     this.derecha = function(){        
-        console.log('derecha');
+        this.x++;
     }
     this.izquierda = function(){        
-        console.log('izquierda');
+        this.x--;
     }    
+    this.nueva();
 }
 
 function dibujaTablero(){
@@ -386,6 +411,7 @@ function borraCanvas(){
 
 function principal(){
     borraCanvas();  
-    dibujaTablero();  
+    dibujaTablero();
+    pieza.caer();  
     pieza.dibuja();
 }
