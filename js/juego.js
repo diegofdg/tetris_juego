@@ -33,35 +33,277 @@ var tablero = [
     [1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
+var fichaGrafico = [
+    [
+        [
+        [0,0,0,0],
+        [0,1,1,0],
+        [0,1,1,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,0],
+        [0,1,1,0],
+        [0,1,1,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,0],
+        [0,1,1,0],
+        [0,1,1,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,0],
+        [0,1,1,0],
+        [0,1,1,0],
+        [0,0,0,0]
+        ]
+    ],
+    
+    [
+        [
+        [0,0,0,0],
+        [2,2,2,2],
+        [0,0,0,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,2,0],
+        [0,0,2,0],
+        [0,0,2,0],
+        [0,0,2,0]
+        ],
+    
+        [
+        [0,0,0,0],
+        [2,2,2,2],
+        [0,0,0,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,2,0],
+        [0,0,2,0],
+        [0,0,2,0],
+        [0,0,2,0]
+        ]
+    
+    ],
+    
+    [
+        [
+        [0,0,0,0],
+        [0,0,3,3],
+        [0,3,3,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,3,0],
+        [0,0,3,3],
+        [0,0,0,3],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,0],
+        [0,0,3,3],
+        [0,3,3,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,3,0],
+        [0,0,3,3],
+        [0,0,0,3],
+        [0,0,0,0]
+        ]
+    
+    ],
+    
+    [
+        [
+        [0,0,0,0],
+        [0,4,4,0],
+        [0,0,4,4],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,4],
+        [0,0,4,4],
+        [0,0,4,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,0],
+        [0,4,4,0],
+        [0,0,4,4],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,4],
+        [0,0,4,4],
+        [0,0,4,0],
+        [0,0,0,0]
+        ]
+    
+    ],
+    
+    [
+        [
+        [0,0,0,0],
+        [0,5,5,5],
+        [0,5,0,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,5,0],
+        [0,0,5,0],
+        [0,0,5,5],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,0,5],
+        [0,5,5,5],
+        [0,0,0,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,5,5,0],
+        [0,0,5,0],
+        [0,0,5,0],
+        [0,0,0,0]
+        ]
+    
+    ],
+    
+    [
+        [
+        [0,0,0,0],
+        [0,6,6,6],
+        [0,0,0,6],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,6,6],
+        [0,0,6,0],
+        [0,0,6,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,6,0,0],
+        [0,6,6,6],
+        [0,0,0,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,6,0],
+        [0,0,6,0],
+        [0,6,6,0],
+        [0,0,0,0]
+        ]
+    ],    
+    
+    [
+        [
+        [0,0,0,0],
+        [0,7,7,7],
+        [0,0,7,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,7,0],
+        [0,0,7,7],
+        [0,0,7,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,7,0],
+        [0,7,7,7],
+        [0,0,0,0],
+        [0,0,0,0]
+        ],
+    
+        [
+        [0,0,7,0],
+        [0,7,7,0],
+        [0,0,7,0],
+        [0,0,0,0]
+        ]
+    ]
+];
+
 function inicializaTeclado(){
     document.addEventListener('keydown', function(tecla){
         if(tecla.key === 'ArrowUp'){
-            console.log('arriba');
+            pieza.rotar();
         }
         if(tecla.key === 'ArrowDown'){
-            console.log('abajo');
+            pieza.abajo();
         }
         if(tecla.key === 'ArrowLeft'){
-            console.log('izquierda');
+            pieza.izquierda();
         }
         if(tecla.key === 'ArrowRight'){
-            console.log('derecha');
+            pieza.derecha();
         }
     });
 }
 
 var objPieza = function(){
-    this.x = 0;
-    this.y = 0;
-    console.log('pieza creada')
+    this.x = 5;
+    this.y = 7;
+
+    this.angulo = 1;
+    this.tipo = 1;
+
+    this.dibuja = function(){
+        for(py=0;py<4;py++){
+            for(px=0;px<4;px++){
+                if(fichaGrafico[this.tipo][this.angulo][py][px]!==0){
+                    ctx.fillStyle = '#777777';
+                    ctx.fillRect((this.x + px)*anchoF, (this.y + py)*altoF, anchoF, altoF);
+                }
+            }
+        }
+    }
+
+    this.rotar = function(){        
+        console.log('rotar');
+    }
+    this.abajo = function(){ 
+        console.log('abajo');       
+    }
+    this.derecha = function(){        
+        console.log('derecha');
+    }
+    this.izquierda = function(){        
+        console.log('izquierda');
+    }    
 }
 
 function inicializa(){
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
 
-    canvas.style.width = anchoCanvas;
-    canvas.style.height = altoCanvas;
+    canvas.width = anchoCanvas;
+    canvas.height = altoCanvas;
 
     pieza = new objPieza();
 
@@ -79,4 +321,5 @@ function borraCanvas(){
 
 function principal(){
     borraCanvas();    
+    pieza.dibuja();
 }
