@@ -29,13 +29,37 @@ var tablero = [
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,1,0,0,0,0,0,0,0,1],
-    [1,0,0,0,2,0,0,0,0,0,0,1],
-    [1,0,0,0,0,3,0,0,0,0,0,1],
-    [1,0,0,0,0,0,4,0,0,0,0,1],
-    [1,0,0,0,0,0,0,5,0,0,0,1],
-    [1,0,0,0,0,0,0,0,6,0,0,1],
-    [1,0,0,0,0,0,0,0,0,7,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1]
+];
+
+var tableroNuevo = [
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
@@ -280,9 +304,17 @@ function inicializaTeclado(){
     });
 }
 
+function reseteaTablero(){
+    for(py=0;py<21;py++){
+		for(px=0;px<12;px++){
+			tablero[py][px] = tableroNuevo[py][px];
+		}
+	}
+}
+
 var objPieza = function(){
     this.x = 0;
-    this.y = 0;
+    this.y = 4;
 
     this.angulo = 0;
     this.tipo = 0;
@@ -292,20 +324,57 @@ var objPieza = function(){
 
     this.nueva = function(){
         this.tipo = Math.floor(Math.random()*7);
-        this.y = 4;
-        this.x = 2;
+        this.fotograma = 0;
+        this.y = 3;
+        this.x = 3;
+    }
+
+    this.compruebaSiPierde = function(){        
+        var pierde = false;
+
+        for(px=1;px<anchoTablero+1;px++){            
+            if(tablero[3][px]>0){
+                pierde = true;
+            }
+        }
+
+        return pierde;
+    }
+
+    this.limpia = function(){
+        var filaCompleta;
+
+        for(py=margenSuperior;py<altoTablero;py++){
+            filaCompleta = true;
+            
+            for(px=1;px<anchoTablero+1;px++){
+                if(tablero[py][px]===0){
+                    filaCompleta = false;
+                }
+            }
+            if(filaCompleta===true){
+                for(px=1;px<anchoTablero+1;px++){
+                    tablero[py][px]=0;
+                }
+            }
+        }
     }
 
     this.caer = function(){
         if(this.fotograma < this.retraso){
             this.fotograma++;
         } else {
-            if(this.colision(this.angulo,this.y+1, this.x+1)===false){
-                this.y++;
-                //this.fotograma = 0;
+            if(this.colision(this.angulo,this.y+1, this.x)===false){
+                this.y++;                
             } else {
                 this.fijar();                
+                this.limpia();
                 this.nueva();
+
+                if(this.compruebaSiPierde()){
+                    reseteaTablero();
+                    console.log('Has perdido el juego')
+                }
             }   
             this.fotograma = 0;         
         }
@@ -325,18 +394,15 @@ var objPieza = function(){
         var resultado = false;
         for(py=0;py<4;py++){
             for(px=0;px<4;px++){
-                if(fichaGrafico[this.tipo][anguloNuevo][py][px]>0){
-                    console.log('primero')
-                    if(tablero[yNueva+py][xNueva+px]>0){
-                        console.log('true')
+                if(fichaGrafico[this.tipo][anguloNuevo][py][px]>0){                    
+                    if(tablero[yNueva+py][xNueva+px]>0){                        
                         resultado = true;
                     }
                 }
             }
         }
         return resultado;
-    }
-    
+    }    
 
     this.dibuja = function(){
         for(py=0;py<4;py++){
@@ -380,10 +446,7 @@ var objPieza = function(){
 
         if(this.colision(anguloNuevo,this.y, this.x)===false){
             this.angulo = anguloNuevo;
-        }
-
-        console.log('rotar');
-        
+        }              
     }
 
     this.abajo = function(){ 
@@ -409,7 +472,7 @@ var objPieza = function(){
 
 function dibujaTablero(){
     for(py=margenSuperior;py<altoTablero;py++){
-        for(px=0;px<anchoTablero;px++){
+        for(px=1;px<anchoTablero+1;px++){
             if(tablero[py][px]!==0){
                 if(tablero[py][px]===1){
                     ctx.fillStyle = rojo;
