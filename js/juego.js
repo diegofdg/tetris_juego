@@ -29,13 +29,13 @@ var tablero = [
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,1,0,0,0,0,0,0,0,1],
+    [1,0,0,0,2,0,0,0,0,0,0,1],
+    [1,0,0,0,0,3,0,0,0,0,0,1],
+    [1,0,0,0,0,0,4,0,0,0,0,1],
+    [1,0,0,0,0,0,0,5,0,0,0,1],
+    [1,0,0,0,0,0,0,0,6,0,0,1],
+    [1,0,0,0,0,0,0,0,0,7,0,1],
     [1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
@@ -300,9 +300,41 @@ var objPieza = function(){
         if(this.fotograma < this.retraso){
             this.fotograma++;
         } else {
-            this.y++;
-            this.fotograma = 0;
+            if(this.colision(this.angulo,this.y+1, this.x+1)===false){
+                this.y++;
+                //this.fotograma = 0;
+            } else {
+                this.fijar();                
+                this.nueva();
+            }   
+            this.fotograma = 0;         
         }
+    }
+
+    this.fijar = function(){
+        for(py=0;py<4;py++){
+            for(px=0;px<4;px++){
+                if(fichaGrafico[this.tipo][this.angulo][py][px]>0){
+                    tablero[this.y+py][this.x+px] = fichaGrafico[this.tipo][this.angulo][py][px];
+                }
+            }
+        }
+    }
+
+    this.colision = function(anguloNuevo, yNueva, xNueva){
+        var resultado = false;
+        for(py=0;py<4;py++){
+            for(px=0;px<4;px++){
+                if(fichaGrafico[this.tipo][anguloNuevo][py][px]>0){
+                    console.log('primero')
+                    if(tablero[yNueva+py][xNueva+px]>0){
+                        console.log('true')
+                        resultado = true;
+                    }
+                }
+            }
+        }
+        return resultado;
     }
     
 
@@ -337,23 +369,41 @@ var objPieza = function(){
         }
     }
 
-    this.rotar = function(){        
-        if(this.angulo < 3){
-            this.angulo++;
+    this.rotar = function(){    
+        var anguloNuevo = this.angulo;        
+        
+        if(anguloNuevo < 3){
+            anguloNuevo++;
         } else {
-            this.angulo = 0;
+            anguloNuevo = 0;
         }
+
+        if(this.colision(anguloNuevo,this.y, this.x)===false){
+            this.angulo = anguloNuevo;
+        }
+
         console.log('rotar');
+        
     }
+
     this.abajo = function(){ 
-        this.y++;
+        if(this.colision(this.angulo,this.y+1, this.x)===false){
+            this.y++;            
+        }
     }
+
     this.derecha = function(){        
-        this.x++;
+        if(this.colision(this.angulo,this.y, this.x+1)===false){
+            this.x++;
+        }
     }
+
     this.izquierda = function(){        
-        this.x--;
+        if(this.colision(this.angulo,this.y, this.x-1)===false){
+            this.x--;
+        }
     }    
+
     this.nueva();
 }
 
